@@ -1,0 +1,15 @@
+name: Github action for terraform validate
+run-name: Run terraform validate
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  Terraform_Validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hashicorp/setup-terraform@v3
+
+      - run: terraform init
+
+      - run: terraform validate
