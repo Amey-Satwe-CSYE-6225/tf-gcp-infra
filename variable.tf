@@ -21,3 +21,11 @@ variable "webapp_route_name" {
 variable "project_id" {
   type = string
 }
+
+variable "db_cidr_range" {
+  type = string
+}
+
+variable "webapp_cidr_range" {
+  type = string
+}
