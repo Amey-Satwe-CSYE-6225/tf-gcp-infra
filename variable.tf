@@ -29,3 +29,43 @@ variable "db_cidr_range" {
 variable "webapp_cidr_range" {
   type = string
 }
+
+variable "routing_mode" {
+  type = string
+}
+
+variable "compute_name" {
+  type = string
+}
+
+variable "machine_type" {
+  type = string
+}
+
+variable "instance_zone" {
+  type = string
+}
+
+variable "compute_tag" {
+  type = string
+}
+
+variable "custom_image_family" {
+  type = string
+}
+
+variable "boot_disk_size" {
+  type = number
+}
+
+variable "boot_disk_type" {
+  type = string
+}
+
+variable "instance_port" {
+  type = number
+}
+
+variable "firewall_name" {
+  type = string
+}
