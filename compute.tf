@@ -4,18 +4,18 @@ resource "google_compute_instance" "default" {
   zone         = var.instance_zone
 
   tags = [var.compute_tag]
-
   boot_disk {
     initialize_params {
       image = var.custom_image_family
       size  = var.boot_disk_size
+      type  = var.boot_disk_type
     }
   }
   network_interface {
     network    = var.vpc_name
     subnetwork = var.webapp_subnet_name
     access_config {
-      network_tier = "STANDARD"
+      network_tier = var.network_tier
     }
   }
   depends_on = [google_compute_network.cloud_demo_vpc, google_compute_subnetwork.webapp]

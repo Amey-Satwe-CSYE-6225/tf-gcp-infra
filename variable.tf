@@ -69,3 +69,7 @@ variable "instance_port" {
 variable "firewall_name" {
   type = string
 }
+
+variable "network_tier" {
+  type = string
+}
