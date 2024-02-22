@@ -15,7 +15,7 @@ resource "google_compute_instance" "default" {
     network    = var.vpc_name
     subnetwork = var.webapp_subnet_name
     access_config {
-
+      network_tier = "STANDARD"
     }
   }
   depends_on = [google_compute_network.cloud_demo_vpc, google_compute_subnetwork.webapp]
