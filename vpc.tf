@@ -6,17 +6,19 @@ resource "google_compute_network" "cloud_demo_vpc" {
 }
 
 resource "google_compute_subnetwork" "webapp" {
-  name          = var.webapp_subnet_name
-  ip_cidr_range = var.webapp_cidr_range
-  region        = var.region
-  network       = google_compute_network.cloud_demo_vpc.name
+  name                     = var.webapp_subnet_name
+  ip_cidr_range            = var.webapp_cidr_range
+  region                   = var.region
+  network                  = google_compute_network.cloud_demo_vpc.name
+  private_ip_google_access = true
 }
 
 resource "google_compute_subnetwork" "db" {
-  name          = var.db_subnet_name
-  ip_cidr_range = var.db_cidr_range
-  region        = var.region
-  network       = google_compute_network.cloud_demo_vpc.name
+  name                     = var.db_subnet_name
+  ip_cidr_range            = var.db_cidr_range
+  region                   = var.region
+  network                  = google_compute_network.cloud_demo_vpc.name
+  private_ip_google_access = true
 }
 
 resource "google_compute_route" "webapp_route" {

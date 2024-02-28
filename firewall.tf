@@ -6,7 +6,7 @@ resource "google_compute_firewall" "firewall_rules" {
 
   allow {
     protocol = "tcp"
-    ports    = [var.instance_port]
+    ports    = var.firewall_ports
   }
   source_ranges = ["0.0.0.0/0"]
   target_tags   = [var.compute_tag]

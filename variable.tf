@@ -61,15 +61,22 @@ variable "boot_disk_size" {
 variable "boot_disk_type" {
   type = string
 }
-
-variable "instance_port" {
-  type = number
-}
-
 variable "firewall_name" {
   type = string
 }
 
 variable "network_tier" {
   type = string
+}
+
+variable "sql_user" {
+  type = string
+}
+
+variable "database_name" {
+  type = string
+}
+
+variable "firewall_ports" {
+  type = list(string)
 }
