@@ -80,3 +80,23 @@ variable "database_name" {
 variable "firewall_ports" {
   type = list(string)
 }
+
+variable "database_version" {
+  type = string
+}
+
+variable "database_availability" {
+  type = string
+}
+
+variable "database_disk_size" {
+  type = number
+}
+
+variable "database_disk_type" {
+  type = string
+}
+
+variable "database_tier" {
+  type = string
+}

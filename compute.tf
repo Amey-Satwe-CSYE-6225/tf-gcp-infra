@@ -5,6 +5,7 @@ resource "google_compute_instance" "default" {
 
   tags = [var.compute_tag]
   boot_disk {
+    auto_delete = true
     initialize_params {
       image = var.custom_image_family
       size  = var.boot_disk_size

@@ -1,14 +1,14 @@
 
 resource "google_sql_database_instance" "main_primary" {
   name             = random_string.DB_INSTANCE_NAME.id
-  database_version = "MYSQL_8_0"
+  database_version = var.database_version
   depends_on       = [google_service_networking_connection.private_vpc_connection, google_compute_network.cloud_demo_vpc]
   region           = var.region
   settings {
-    tier                        = "db-f1-micro"
-    availability_type           = "REGIONAL"
-    disk_size                   = 100
-    disk_type                   = "pd-ssd"
+    tier                        = var.database_tier
+    availability_type           = var.database_availability
+    disk_size                   = var.database_disk_size
+    disk_type                   = var.database_disk_type
     deletion_protection_enabled = false
     ip_configuration {
       ipv4_enabled                                  = false
