@@ -100,3 +100,27 @@ variable "database_disk_type" {
 variable "database_tier" {
   type = string
 }
+
+variable "gloabal_ip_name" {
+  type = string
+}
+
+variable "global_ip_purpose" {
+  type = string
+}
+
+variable "global_ip_address_type" {
+  type = string
+}
+variable "global_ip_version" {
+  type = string
+}
+variable "global_ip_prefix_length" {
+  type = number
+}
+variable "service_networking_api_service" {
+  type = string
+}
+variable "service_networking_deletion_policy" {
+  type = string
+}

@@ -49,18 +49,18 @@ resource "random_string" "DB_INSTANCE_NAME" {
 
 
 resource "google_compute_global_address" "private_ip_block" {
-  name          = "private-ip-block"
-  purpose       = "VPC_PEERING"
-  address_type  = "INTERNAL"
-  ip_version    = "IPV4"
-  prefix_length = 24
+  name          = var.gloabal_ip_name
+  purpose       = var.global_ip_purpose
+  address_type  = var.global_ip_address_type
+  ip_version    = var.global_ip_version
+  prefix_length = var.global_ip_prefix_length
   network       = google_compute_network.cloud_demo_vpc.name
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
   network                 = google_compute_network.cloud_demo_vpc.name
-  service                 = "servicenetworking.googleapis.com"
+  service                 = var.service_networking_api_service
   reserved_peering_ranges = [google_compute_global_address.private_ip_block.name]
   depends_on              = [google_compute_global_address.private_ip_block]
-  deletion_policy         = "ABANDON"
+  deletion_policy         = var.service_networking_deletion_policy
 }
