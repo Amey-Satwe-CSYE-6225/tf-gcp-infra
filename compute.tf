@@ -1,9 +1,9 @@
 resource "google_compute_instance" "default" {
-  name         = var.compute_name
-  machine_type = var.machine_type
-  zone         = var.instance_zone
-
-  tags = [var.compute_tag]
+  name                      = var.compute_name
+  machine_type              = var.machine_type
+  zone                      = var.instance_zone
+  allow_stopping_for_update = true
+  tags                      = [var.compute_tag]
   boot_disk {
     auto_delete = true
     initialize_params {
@@ -20,6 +20,10 @@ resource "google_compute_instance" "default" {
     }
   }
 
+  service_account {
+    email  = google_service_account.csye-demo-service-account.email
+    scopes = ["cloud-platform"]
+  }
 
   metadata_startup_script = <<-EOT
   #!/bin/bash
@@ -30,7 +34,8 @@ resource "google_compute_instance" "default" {
     sudo echo "UNAME=${google_sql_user.db_user.name}" >> $file
     sudo echo "PASSWORD=${random_password.DB_Password.result}" >> $file
     sudo echo "HOST=${google_sql_database_instance.main_primary.private_ip_address}" >> $file
+    sudo echo "ENVIRONMENT=PRODUCTION" >> $file
   fi
   EOT
-  depends_on              = [google_compute_network.cloud_demo_vpc, google_compute_subnetwork.webapp]
+  depends_on              = [google_compute_network.cloud_demo_vpc, google_compute_subnetwork.webapp, google_service_account.csye-demo-service-account]
 }
