@@ -35,8 +35,8 @@ resource "google_sql_user" "db_user" {
 }
 
 resource "random_password" "DB_Password" {
-  length  = 16
-  special = true
+  length  = 8
+  special = false
 }
 
 resource "random_string" "DB_INSTANCE_NAME" {
