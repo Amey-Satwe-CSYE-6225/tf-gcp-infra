@@ -1,5 +1,5 @@
 resource "google_service_account" "csye-demo-service-account" {
-  account_id                   = "csye-demo-service-account"
+  account_id                   = var.service_account_id
   display_name                 = "VM Monitor Service Acc"
   create_ignore_already_exists = true
 }

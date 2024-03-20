@@ -124,3 +124,23 @@ variable "service_networking_api_service" {
 variable "service_networking_deletion_policy" {
   type = string
 }
+
+variable "service_account_id" {
+  type = string
+}
+
+variable "dns_managed_zone_id" {
+  type = string
+}
+
+variable "dns_name" {
+  type = string
+}
+
+variable "dns_record_type" {
+  type = string
+}
+
+variable "dns_ttl" {
+  type = number
+}
