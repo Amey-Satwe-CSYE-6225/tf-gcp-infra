@@ -144,3 +144,19 @@ variable "dns_record_type" {
 variable "dns_ttl" {
   type = number
 }
+
+variable "display_name" {
+  type = string
+}
+
+variable "monitoring_role" {
+  type = string
+}
+
+variable "logging_role" {
+  type = string
+}
+
+variable "scopes" {
+  type = list(string)
+}
