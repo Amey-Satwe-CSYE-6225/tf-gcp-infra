@@ -22,7 +22,7 @@ resource "google_compute_instance" "default" {
 
   service_account {
     email  = google_service_account.csye-demo-service-account.email
-    scopes = ["cloud-platform"]
+    scopes = var.scopes
   }
 
   metadata_startup_script = <<-EOT
