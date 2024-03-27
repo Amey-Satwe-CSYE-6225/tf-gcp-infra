@@ -21,3 +21,12 @@ resource "google_project_iam_binding" "monitoring_iam" {
     "serviceAccount:${google_service_account.csye-demo-service-account.email}",
   ]
 }
+
+resource "google_project_iam_binding" "pubsub_role" {
+  project = var.project_id
+  role    = "roles/pubsub.publisher"
+
+  members = [
+    "serviceAccount:${google_service_account.csye-demo-service-account.email}",
+  ]
+}

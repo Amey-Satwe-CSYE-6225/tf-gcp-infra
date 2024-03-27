@@ -160,3 +160,7 @@ variable "logging_role" {
 variable "scopes" {
   type = list(string)
 }
+
+variable "domain_name" {
+  type = string
+}

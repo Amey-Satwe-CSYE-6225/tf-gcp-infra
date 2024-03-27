@@ -36,12 +36,12 @@ resource "google_storage_bucket_object" "default" {
 }
 
 resource "google_cloudfunctions2_function" "default" {
-  name        = "function"
-  location    = "us-central1"
+  name        = "verify_email"
+  location    = "us-east1"
   description = "a new function"
 
   build_config {
-    runtime     = "nodejs16"
+    runtime     = "nodejs18"
     entry_point = "myCloudEventFunction" # Set the entry point
     environment_variables = {
       BUILD_CONFIG_TEST = "build_test"
@@ -60,17 +60,32 @@ resource "google_cloudfunctions2_function" "default" {
     available_memory   = "256M"
     timeout_seconds    = 60
     environment_variables = {
-      SERVICE_CONFIG_TEST = "config_test"
+      DATABASE = google_sql_database.main.name
+      UNAME    = google_sql_user.db_user.name
+      PASSWORD = random_password.DB_Password.result
+      HOST     = google_sql_database_instance.main_primary.private_ip_address
+      DOMAIN   = var.domain_name
     }
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
+    vpc_connector                  = google_vpc_access_connector.vpcConnector.self_link
     all_traffic_on_latest_revision = true
     service_account_email          = google_service_account.default.email
+    vpc_connector_egress_settings  = "VPC_CONNECTOR_EGRESS_SETTINGS_UNSPECIFIED"
   }
 
   event_trigger {
-    trigger_region = "us-central1"
+    trigger_region = "us-east1"
     event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = "projects/csye-6225-demo-413900/topics/test"
+    pubsub_topic   = "projects/csye-6225-demo-413900/topics/verify_email"
     retry_policy   = "RETRY_POLICY_RETRY"
   }
+  depends_on = [google_pubsub_topic.verifyUser, google_sql_database.main]
+}
+
+resource "google_vpc_access_connector" "vpcConnector" {
+  name          = "connector"
+  ip_cidr_range = "10.8.0.0/28"
+  network       = google_compute_network.cloud_demo_vpc.id
+  machine_type  = "f1-micro"
+
 }
