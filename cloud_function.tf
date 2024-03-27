@@ -37,7 +37,7 @@ resource "google_storage_bucket_object" "default" {
 
 resource "google_cloudfunctions2_function" "default" {
   name        = "verify_email"
-  location    = "us-east1"
+  location    = var.region
   description = "a new function"
 
   build_config {
@@ -55,7 +55,7 @@ resource "google_cloudfunctions2_function" "default" {
   }
 
   service_config {
-    max_instance_count = 3
+    max_instance_count = 1
     min_instance_count = 1
     available_memory   = "256M"
     timeout_seconds    = 60
@@ -74,9 +74,9 @@ resource "google_cloudfunctions2_function" "default" {
   }
 
   event_trigger {
-    trigger_region = "us-east1"
+    trigger_region = var.region
     event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = "projects/csye-6225-demo-413900/topics/verify_email"
+    pubsub_topic   = var.pubsub_topic
     retry_policy   = "RETRY_POLICY_RETRY"
   }
   depends_on = [google_pubsub_topic.verifyUser, google_sql_database.main]
@@ -87,5 +87,4 @@ resource "google_vpc_access_connector" "vpcConnector" {
   ip_cidr_range = "10.8.0.0/28"
   network       = google_compute_network.cloud_demo_vpc.id
   machine_type  = "f1-micro"
-
 }
