@@ -164,3 +164,10 @@ variable "scopes" {
 variable "domain_name" {
   type = string
 }
+variable "pubsub_topic" {
+  type = string
+}
+
+variable "verify_schema" {
+  type = string
+}
