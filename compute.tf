@@ -1,30 +1,69 @@
-resource "google_compute_instance" "default" {
-  name                      = var.compute_name
-  machine_type              = var.machine_type
-  zone                      = var.instance_zone
-  allow_stopping_for_update = true
-  tags                      = [var.compute_tag]
-  boot_disk {
-    auto_delete = true
-    initialize_params {
-      image = var.custom_image_family
-      size  = var.boot_disk_size
-      type  = var.boot_disk_type
-    }
+# resource "google_compute_instance" "default" {
+#   name                      = var.compute_name
+#   machine_type              = var.machine_type
+#   zone                      = var.instance_zone
+#   allow_stopping_for_update = true
+#   tags                      = [var.compute_tag]
+#   boot_disk {
+#     auto_delete = true
+#     initialize_params {
+#       image = var.custom_image_family
+#       size  = var.boot_disk_size
+#       type  = var.boot_disk_type
+#     }
+#   }
+#   network_interface {
+#     network    = var.vpc_name
+#     subnetwork = var.webapp_subnet_name
+#     access_config {
+#       network_tier = var.network_tier
+#     }
+#   }
+
+#   service_account {
+#     email  = google_service_account.csye-demo-service-account.email
+#     scopes = var.scopes
+#   }
+
+#   metadata_startup_script = <<-EOT
+#   #!/bin/bash
+#   file=/opt/webapp/.env
+#   if [ ! -f $file ]; then
+#     sudo touch $file
+#     sudo echo "DATABASE=${google_sql_database.main.name}" >> $file
+#     sudo echo "UNAME=${google_sql_user.db_user.name}" >> $file
+#     sudo echo "PASSWORD=${random_password.DB_Password.result}" >> $file
+#     sudo echo "HOST=${google_sql_database_instance.main_primary.private_ip_address}" >> $file
+#     sudo echo "ENVIRONMENT=PRODUCTION" >> $file
+#   fi
+#   EOT
+#   depends_on              = [google_compute_network.cloud_demo_vpc, google_compute_subnetwork.webapp, google_service_account.csye-demo-service-account]
+# }
+
+data "google_compute_image" "my_image" {
+  family = var.custom_image_family
+}
+
+resource "google_compute_region_instance_template" "instance_template" {
+  name         = "webapp-template"
+  machine_type = var.machine_type
+  tags         = [var.compute_tag]
+
+  disk {
+    source_image = data.google_compute_image.my_image.self_link
+    auto_delete  = true
+    boot         = true
   }
+
   network_interface {
     network    = var.vpc_name
     subnetwork = var.webapp_subnet_name
-    access_config {
-      network_tier = var.network_tier
-    }
   }
 
   service_account {
     email  = google_service_account.csye-demo-service-account.email
     scopes = var.scopes
   }
-
   metadata_startup_script = <<-EOT
   #!/bin/bash
   file=/opt/webapp/.env
