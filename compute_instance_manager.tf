@@ -4,7 +4,7 @@ resource "google_compute_region_health_check" "health-check" {
   check_interval_sec  = 5
   timeout_sec         = 5
   healthy_threshold   = 2
-  unhealthy_threshold = 10
+  unhealthy_threshold = 5
 
   http_health_check {
     request_path = "/healthz"
@@ -18,7 +18,7 @@ resource "google_compute_region_instance_group_manager" "webappServer" {
 
   base_instance_name        = "webapp"
   region                    = var.region
-  distribution_policy_zones = ["us-east1-b", "us-east1-c"]
+  distribution_policy_zones = var.dist_policy_zones
 
   version {
     instance_template = google_compute_region_instance_template.instance_template.self_link
