@@ -8,7 +8,7 @@ resource "google_compute_firewall" "firewall_rules" {
     protocol = "tcp"
     ports    = var.firewall_ports
   }
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = [var.proxy_ip_cidr_range]
   target_tags   = [var.compute_tag]
   depends_on    = [google_compute_network.cloud_demo_vpc, google_compute_subnetwork.webapp]
 }

@@ -171,3 +171,19 @@ variable "pubsub_topic" {
 variable "verify_schema" {
   type = string
 }
+
+variable "dist_policy_zones" {
+  type = list(string)
+}
+
+variable "firewall_generic_source_ranges" {
+  type = list(string)
+}
+
+variable "target_tags_backend" {
+  type = list(string)
+}
+
+variable "proxy_ip_cidr_range" {
+  type = string
+}

@@ -1,6 +1,6 @@
 resource "google_compute_subnetwork" "proxy_only" {
   name          = "proxy-only-subnet"
-  ip_cidr_range = "10.1.0.0/23"
+  ip_cidr_range = var.proxy_ip_cidr_range
   network       = google_compute_network.cloud_demo_vpc.id
   purpose       = "REGIONAL_MANAGED_PROXY"
   region        = var.region
@@ -15,8 +15,8 @@ resource "google_compute_firewall" "default" {
   direction     = "INGRESS"
   network       = google_compute_network.cloud_demo_vpc.id
   priority      = 1000
-  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
-  target_tags   = ["load-balanced-backend"]
+  source_ranges = var.firewall_generic_source_ranges
+  target_tags   = var.target_tags_backend
 }
 
 resource "google_compute_address" "default" {
@@ -27,7 +27,7 @@ resource "google_compute_address" "default" {
 }
 
 resource "google_compute_region_backend_service" "default" {
-  name                  = "l7-xlb-backend-service"
+  name                  = "backend-service"
   region                = var.region
   load_balancing_scheme = "EXTERNAL_MANAGED"
   health_checks         = [google_compute_region_health_check.health-check.id]
@@ -44,13 +44,13 @@ resource "google_compute_region_backend_service" "default" {
 }
 
 resource "google_compute_region_url_map" "default" {
-  name            = "regional-l7-xlb-map-1"
+  name            = "regional-map"
   region          = var.region
   default_service = google_compute_region_backend_service.default.id
 }
 
 resource "google_compute_region_target_https_proxy" "default" {
-  name             = "l7-xlb-proxy"
+  name             = "load-balancer-proxy"
   region           = var.region
   url_map          = google_compute_region_url_map.default.id
   ssl_certificates = [google_compute_region_ssl_certificate.ssl_cert.id]
@@ -64,7 +64,7 @@ resource "google_compute_region_ssl_certificate" "ssl_cert" {
 }
 
 resource "google_compute_forwarding_rule" "default" {
-  name       = "l7-xlb-forwarding-rule"
+  name       = "forwarding-rule"
   depends_on = [google_compute_subnetwork.proxy_only]
   region     = var.region
 
