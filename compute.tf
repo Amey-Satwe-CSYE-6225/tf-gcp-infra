@@ -47,7 +47,7 @@ data "google_compute_image" "my_image" {
 resource "google_compute_region_instance_template" "instance_template" {
   name         = "webapp-template"
   machine_type = var.machine_type
-  tags         = [var.compute_tag]
+  tags         = [var.compute_tag, "load-balanced-backend"]
 
   disk {
     source_image = data.google_compute_image.my_image.self_link
@@ -77,4 +77,5 @@ resource "google_compute_region_instance_template" "instance_template" {
   fi
   EOT
   depends_on              = [google_compute_network.cloud_demo_vpc, google_compute_subnetwork.webapp, google_service_account.csye-demo-service-account]
+
 }

@@ -34,3 +34,8 @@ override.tf.json
 terraform.rc
 
 *.lock.hcl
+
+*.crt
+key.txt
+
+*.DS_store
