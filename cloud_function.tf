@@ -22,7 +22,7 @@ resource "google_storage_bucket" "default" {
   location                    = "US"
   uniform_bucket_level_access = true
   encryption {
-    default_kms_key_name = google_kms_crypto_key.bucket_key
+    default_kms_key_name = google_kms_crypto_key.bucket_key.name
   }
 }
 data "google_storage_project_service_account" "gcs_account" {
