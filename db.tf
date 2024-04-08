@@ -4,7 +4,7 @@ resource "google_sql_database_instance" "main_primary" {
   database_version    = var.database_version
   depends_on          = [google_service_networking_connection.private_vpc_connection, google_compute_network.cloud_demo_vpc]
   region              = var.region
-  encryption_key_name = google_kms_crypto_key.sql_key
+  encryption_key_name = google_kms_crypto_key.sql_key.name
   settings {
     tier                        = var.database_tier
     availability_type           = var.database_availability
