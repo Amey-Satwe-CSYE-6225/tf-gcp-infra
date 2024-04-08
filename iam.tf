@@ -30,3 +30,12 @@ resource "google_project_iam_binding" "pubsub_role" {
     "serviceAccount:${google_service_account.csye-demo-service-account.email}",
   ]
 }
+
+resource "google_kms_crypto_key_iam_binding" "vm_iam" {
+  crypto_key_id = google_kms_crypto_key.sql_key.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+
+  members = [
+    "serviceAccount:${google_service_account.csye-demo-service-account.email}",
+  ]
+}

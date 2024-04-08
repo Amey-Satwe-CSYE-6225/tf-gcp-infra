@@ -1,9 +1,10 @@
 
 resource "google_sql_database_instance" "main_primary" {
-  name             = random_string.DB_INSTANCE_NAME.id
-  database_version = var.database_version
-  depends_on       = [google_service_networking_connection.private_vpc_connection, google_compute_network.cloud_demo_vpc]
-  region           = var.region
+  name                = random_string.DB_INSTANCE_NAME.id
+  database_version    = var.database_version
+  depends_on          = [google_service_networking_connection.private_vpc_connection, google_compute_network.cloud_demo_vpc]
+  region              = var.region
+  encryption_key_name = google_kms_crypto_key.sql_key
   settings {
     tier                        = var.database_tier
     availability_type           = var.database_availability
@@ -63,4 +64,15 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   reserved_peering_ranges = [google_compute_global_address.private_ip_block.name]
   depends_on              = [google_compute_global_address.private_ip_block]
   deletion_policy         = var.service_networking_deletion_policy
+}
+
+
+
+resource "google_kms_crypto_key_iam_binding" "crypto_key" {
+  crypto_key_id = google_kms_crypto_key.sql_key.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+
+  members = [
+    "serviceAccount:${google_sql_database_instance.main_primary.service_account_email_address}",
+  ]
 }

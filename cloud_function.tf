@@ -21,6 +21,20 @@ resource "google_storage_bucket" "default" {
   name                        = "${random_id.bucket_prefix.hex}-gcf-source" # Every bucket name must be globally unique
   location                    = "US"
   uniform_bucket_level_access = true
+  encryption {
+    default_kms_key_name = google_kms_crypto_key.bucket_key
+  }
+}
+data "google_storage_project_service_account" "gcs_account" {
+}
+
+resource "google_kms_crypto_key_iam_binding" "bucket_iam" {
+  crypto_key_id = google_kms_crypto_key.sql_key.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+
+  members = [
+    "serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}",
+  ]
 }
 
 data "archive_file" "default" {
@@ -33,6 +47,7 @@ resource "google_storage_bucket_object" "default" {
   name   = "function-source.zip"
   bucket = google_storage_bucket.default.name
   source = data.archive_file.default.output_path # Path to the zipped function source code
+
 }
 
 resource "google_cloudfunctions2_function" "default" {
