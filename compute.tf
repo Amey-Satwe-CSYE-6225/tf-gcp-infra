@@ -11,6 +11,9 @@ resource "google_compute_region_instance_template" "instance_template" {
     source_image = data.google_compute_image.my_image.self_link
     auto_delete  = true
     boot         = true
+    disk_encryption_key {
+      kms_key_self_link = google_kms_crypto_key.compute_key
+    }
   }
 
   network_interface {
