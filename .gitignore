@@ -36,3 +36,7 @@ terraform.rc
 *.lock.hcl
 
 *.DS_store
+
+*.crt
+
+key.txt
