@@ -187,3 +187,11 @@ variable "target_tags_backend" {
 variable "proxy_ip_cidr_range" {
   type = string
 }
+
+variable "key_file" {
+  type = string
+}
+
+variable "cert_file" {
+  type = string
+}

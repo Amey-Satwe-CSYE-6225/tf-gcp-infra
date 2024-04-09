@@ -59,8 +59,8 @@ resource "google_compute_region_target_https_proxy" "default" {
 resource "google_compute_region_ssl_certificate" "ssl_cert" {
   region      = var.region
   name        = "namecheap-certificate"
-  private_key = file("key.txt")
-  certificate = file("ameysatwe_me.crt")
+  private_key = file(var.key_file)
+  certificate = file(var.cert_file)
 }
 
 resource "google_compute_forwarding_rule" "default" {
