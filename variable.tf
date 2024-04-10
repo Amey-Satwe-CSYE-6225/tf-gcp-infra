@@ -236,3 +236,7 @@ variable "frontend_port" {
 variable "message_retention_duration" {
   type = string
 }
+
+variable "secret_manager_service_account_id" {
+  type = string
+}
