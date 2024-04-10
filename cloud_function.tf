@@ -22,9 +22,9 @@ resource "google_storage_bucket" "default" {
   location                    = "US-EAST1"
   uniform_bucket_level_access = true
   depends_on                  = [google_kms_crypto_key_iam_binding.bucket_iam]
-  # encryption {
-  #   default_kms_key_name = google_kms_crypto_key.bucket_key.id
-  # }
+  encryption {
+    default_kms_key_name = google_kms_crypto_key.bucket_key.id
+  }
 }
 resource "google_kms_crypto_key_iam_binding" "bucket_iam" {
   crypto_key_id = google_kms_crypto_key.bucket_key.id
