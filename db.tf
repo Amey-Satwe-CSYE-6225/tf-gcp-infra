@@ -2,9 +2,9 @@
 resource "google_sql_database_instance" "main_primary" {
   name                = random_string.DB_INSTANCE_NAME.id
   database_version    = var.database_version
-  depends_on          = [google_service_networking_connection.private_vpc_connection, google_compute_network.cloud_demo_vpc]
+  depends_on          = [google_service_networking_connection.private_vpc_connection, google_compute_network.cloud_demo_vpc, google_kms_crypto_key_iam_binding.sql_iam, google_project_service_identity.gcp_sa_cloud_sql]
   region              = var.region
-  encryption_key_name = google_kms_crypto_key.sql_key.name
+  encryption_key_name = google_kms_crypto_key.sql_key.id
   settings {
     tier                        = var.database_tier
     availability_type           = var.database_availability
@@ -66,13 +66,17 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   deletion_policy         = var.service_networking_deletion_policy
 }
 
+resource "google_project_service_identity" "gcp_sa_cloud_sql" {
+  provider = google-beta
+  service  = "sqladmin.googleapis.com"
+}
 
-
-resource "google_kms_crypto_key_iam_binding" "crypto_key" {
+resource "google_kms_crypto_key_iam_binding" "sql_iam" {
+  provider      = google-beta
   crypto_key_id = google_kms_crypto_key.sql_key.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
 
   members = [
-    "serviceAccount:${google_sql_database_instance.main_primary.service_account_email_address}",
+    "serviceAccount:${google_project_service_identity.gcp_sa_cloud_sql.email}",
   ]
 }

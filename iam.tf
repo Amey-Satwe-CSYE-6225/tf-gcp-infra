@@ -32,7 +32,7 @@ resource "google_project_iam_binding" "pubsub_role" {
 }
 
 resource "google_kms_crypto_key_iam_binding" "vm_iam" {
-  crypto_key_id = google_kms_crypto_key.sql_key.id
+  crypto_key_id = google_kms_crypto_key.compute_key.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
 
   members = [
