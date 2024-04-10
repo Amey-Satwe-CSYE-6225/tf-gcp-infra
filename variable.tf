@@ -195,3 +195,7 @@ variable "key_file" {
 variable "cert_file" {
   type = string
 }
+
+variable "API_PASS" {
+  type = string
+}

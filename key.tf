@@ -1,10 +1,14 @@
+resource "random_string" "random_key" {
+  length  = 4
+  special = false
+}
 resource "google_kms_key_ring" "keyring" {
-  name     = "keyring-example"
+  name     = "keyringexample${random_string.random_key.id}"
   location = "us-east1"
 }
 
 resource "google_kms_crypto_key" "compute_key" {
-  name            = "crypto-key-example"
+  name            = "cryptokeyexample${random_string.random_key.id}"
   key_ring        = google_kms_key_ring.keyring.id
   rotation_period = "2592000s"
 
@@ -15,10 +19,10 @@ resource "google_kms_crypto_key" "compute_key" {
 
 
 resource "google_kms_crypto_key" "sql_key" {
-  name            = "sql_key"
+  name            = "sqlkey${random_string.random_key.id}"
   key_ring        = google_kms_key_ring.keyring.id
   rotation_period = "2592000s"
-
+  purpose         = "ENCRYPT_DECRYPT"
   lifecycle {
     prevent_destroy = false
   }
@@ -26,7 +30,7 @@ resource "google_kms_crypto_key" "sql_key" {
 
 
 resource "google_kms_crypto_key" "bucket_key" {
-  name            = "bucket_key"
+  name            = "bucketkey${random_string.random_key.id}"
   key_ring        = google_kms_key_ring.keyring.id
   rotation_period = "2592000s"
 

@@ -19,21 +19,19 @@ resource "google_service_account" "default" {
 
 resource "google_storage_bucket" "default" {
   name                        = "${random_id.bucket_prefix.hex}-gcf-source" # Every bucket name must be globally unique
-  location                    = "US"
+  location                    = "US-EAST1"
   uniform_bucket_level_access = true
-  encryption {
-    default_kms_key_name = google_kms_crypto_key.bucket_key.name
-  }
+  depends_on                  = [google_kms_crypto_key_iam_binding.bucket_iam]
+  # encryption {
+  #   default_kms_key_name = google_kms_crypto_key.bucket_key.id
+  # }
 }
-data "google_storage_project_service_account" "gcs_account" {
-}
-
 resource "google_kms_crypto_key_iam_binding" "bucket_iam" {
-  crypto_key_id = google_kms_crypto_key.sql_key.id
+  crypto_key_id = google_kms_crypto_key.bucket_key.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
 
   members = [
-    "serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}",
+    "serviceAccount:service-352352067385@gs-project-accounts.iam.gserviceaccount.com",
   ]
 }
 
@@ -80,6 +78,7 @@ resource "google_cloudfunctions2_function" "default" {
       PASSWORD = random_password.DB_Password.result
       HOST     = google_sql_database_instance.main_primary.private_ip_address
       DOMAIN   = var.domain_name
+      API_PASS = var.API_PASS
     }
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
     vpc_connector                  = google_vpc_access_connector.vpcConnector.self_link
