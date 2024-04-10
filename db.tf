@@ -74,7 +74,7 @@ resource "google_project_service_identity" "gcp_sa_cloud_sql" {
 resource "google_kms_crypto_key_iam_binding" "sql_iam" {
   provider      = google-beta
   crypto_key_id = google_kms_crypto_key.sql_key.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  role          = var.encrypter_decrypter_role
 
   members = [
     "serviceAccount:${google_project_service_identity.gcp_sa_cloud_sql.email}",
