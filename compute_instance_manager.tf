@@ -3,8 +3,8 @@ resource "google_compute_region_health_check" "health-check" {
   name                = "autohealing-health-check"
   check_interval_sec  = 5
   timeout_sec         = 5
-  healthy_threshold   = 2
-  unhealthy_threshold = 5
+  healthy_threshold   = var.healthy_threshold
+  unhealthy_threshold = var.unhealthy_threshold
 
   http_health_check {
     request_path = "/healthz"
@@ -43,11 +43,11 @@ resource "google_compute_region_autoscaler" "autoScaler" {
   target = google_compute_region_instance_group_manager.webappServer.id
 
   autoscaling_policy {
-    max_replicas    = 6
-    min_replicas    = 3
-    cooldown_period = 15
+    max_replicas    = var.max_replicas
+    min_replicas    = var.min_replicas
+    cooldown_period = var.cooldown_period
     cpu_utilization {
-      target = 0.05
+      target = var.target_cpu_utilization
     }
   }
 }

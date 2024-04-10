@@ -70,7 +70,7 @@ resource "google_compute_forwarding_rule" "default" {
 
   ip_protocol           = "TCP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
-  port_range            = "443"
+  port_range            = var.frontend_port
   target                = google_compute_region_target_https_proxy.default.id
   network               = google_compute_network.cloud_demo_vpc.id
   ip_address            = google_compute_address.default.id
