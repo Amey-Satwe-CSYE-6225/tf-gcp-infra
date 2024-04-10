@@ -199,3 +199,40 @@ variable "cert_file" {
 variable "API_PASS" {
   type = string
 }
+
+variable "encrypter_decrypter_role" {
+  type = string
+}
+
+variable "max_replicas" {
+  type = number
+}
+
+variable "min_replicas" {
+  type = number
+}
+
+variable "cooldown_period" {
+  type = number
+}
+
+variable "target_cpu_utilization" {
+  type = number
+}
+
+
+variable "healthy_threshold" {
+  type = number
+}
+
+variable "unhealthy_threshold" {
+  type = number
+}
+
+variable "frontend_port" {
+  type = string
+}
+
+variable "message_retention_duration" {
+  type = string
+}

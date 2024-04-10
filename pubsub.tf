@@ -22,5 +22,5 @@ resource "google_pubsub_topic" "verifyUser" {
     schema   = var.verify_schema
     encoding = "JSON"
   }
-  message_retention_duration = "604800s"
+  message_retention_duration = var.message_retention_duration
 }
